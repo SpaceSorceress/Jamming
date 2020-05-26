@@ -10,6 +10,7 @@ import './SearchBar.css';
 
          this.handleValueChange=this.handleValueChange.bind(this);
          this.handleSearch=this.handleSearch.bind(this);
+         this.keyDown=this.keyDown.bind(this);
      }
 
      handleValueChange(event){
@@ -18,13 +19,20 @@ import './SearchBar.css';
         });
     }
 
+    keyDown(event){
+        if(event.key==="Enter"){
+            this.handleSearch();
+            event.preventDefault();
+        }
+    }
+
     handleSearch(){
         this.props.onSearch(this.state.searchValue);
     }
 
     render() {
         return (
-            <div className="SearchBar">
+            <div className="SearchBar" onKeyDown={this.keyDown}>
                 <input placeholder="Enter A Song, Album, or Artist"
                 onChange={this.handleValueChange} />
                 <button className="SearchButton"

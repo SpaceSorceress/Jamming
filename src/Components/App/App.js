@@ -142,6 +142,7 @@ class App extends React.Component {
         playlistName:'New playlist',
         playlistTracks:[]
       });
+      alert("Playlist successfully added");
   }
 
   search(item){
