@@ -1,0 +1,10 @@
+.LocalPlaylist h3{
+    padding: 0.65rem;
+    color:white;
+    
+}
+.LocalPlaylist h3:hover{
+        color:  #6c41ec;
+        cursor: pointer; 
+}
+  

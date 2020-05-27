@@ -1,0 +1,34 @@
+.PlaylistList {
+    overflow-y: scroll;
+    width: 100%;
+    max-height: 450px;
+    padding:  1.16rem;
+    background-color: rgba(1, 12, 63, 0.7);
+    box-shadow: 0 4px 2px 2px #000000;
+  }
+  
+  .PlaylistList h2 {
+    width: 100%;
+    border-bottom: 1px solid #6f6f6f;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.55rem;
+    color: #fff;
+    padding: 2rem 0 0.5rem 0;
+  }
+  .PlaylistList .Playlists{
+      margin-top: 1rem;
+      width: 100%;
+      
+  }
+  
+  
+  ::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+  }
+  
+  @media only screen and (max-width: 1020px) {
+    .PlaylistList {
+      width: 90%;
+    }
+  }

@@ -44,9 +44,23 @@ h2 {
   width: 100%;
 }
 
+.Playlists{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 37%;
+}
+
 @media only screen and (max-width: 1020px) {
   .App-playlist {
     align-items: center;
     flex-direction: column;
   }
+  .Playlists{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+  }
 }
+

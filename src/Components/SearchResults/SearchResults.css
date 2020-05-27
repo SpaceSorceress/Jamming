@@ -6,6 +6,10 @@
     background-color: rgba(1, 12, 63, 0.7);
     box-shadow: 0 4px 2px 2px #000000;
   }
+  .SearchResults h2{
+    padding: 2rem 0 0.5rem 0;
+    border-bottom: 1px solid #6f6f6f;
+  }
   
   ::-webkit-scrollbar {
       width: 0px;
