@@ -12,12 +12,15 @@ class PlaylistName extends React.Component{
         this.props.showPlaylistName(event.target.innerHTML);
         event.preventDefault();
     }
+    editName(event){
+
+    }
 
 
     render(){
         return (
             <div className="LocalPlaylist">
-                <h3 onClick={this.handleClick} id={this.props.id}>
+                 <h3 onClick={this.handleClick} id={this.props.id}>
                     {this.props.name}</h3>
             </div>
         )

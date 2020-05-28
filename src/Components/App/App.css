@@ -50,6 +50,20 @@ h2 {
   justify-content: flex-start;
   width: 37%;
 }
+footer{
+    padding: .77rem 0;
+    background-color: #010c3f;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: #fff;
+}
+footer h3{
+  padding-top: 0.3rem;
+}
+footer span{
+  font-size: 0.75rem;
+}
 
 @media only screen and (max-width: 1020px) {
   .App-playlist {
@@ -61,6 +75,12 @@ h2 {
     flex-direction: column;
     justify-content: flex-start;
     width: 100%;
+  }
+  footer{
+    font-size: 0.75rem;
+  }
+  footer span{
+    font-size: smaller;
   }
 }
 

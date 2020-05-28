@@ -5,7 +5,7 @@ import './SearchBar.css';
      constructor(props){
          super(props);
          this.state={
-            searchValue:""
+            searchValue:"Spotify"
          };
 
          this.handleValueChange=this.handleValueChange.bind(this);
@@ -33,10 +33,15 @@ import './SearchBar.css';
     render() {
         return (
             <div className="SearchBar" onKeyDown={this.keyDown}>
-                <input placeholder="Enter A Song, Album, or Artist"
-                onChange={this.handleValueChange} />
-                <button className="SearchButton"
-                onClick={this.handleSearch}>SEARCH</button>
+                {this.props.loggedIn&&<input placeholder={this.props.placeholderTrue}
+                onChange={this.handleValueChange} />}
+                {!this.props.loggedIn&&<input value={this.props.placeholderFalse}
+                onChange={this.handleValueChange} />}
+
+                {this.props.loggedIn&&<button className="SearchButton"
+                onClick={this.handleSearch}>SEARCH</button>}
+                {!this.props.loggedIn&&<button className="SearchButton"
+                onClick={this.handleSearch} id="searchButton">LOG IN</button>}
             </div>
         )
     }

@@ -13,118 +13,14 @@ class App extends React.Component {
 
     this.state = {
       searchResults: [
-        {
-          album:
-            "The Black Parade",
-          artist:
-            "My Chemical Romance",
-          id:
-            "5wQnmLuC1W7ATsArWACrgW",
-          name:
-            "Welcome to the Black Parade",
-          uri:
-            "spotify:track:5wQnmLuC1W7ATsArWACrgW"
-        },
-
-        {
-          album: "Appetite For Destruction", artist:
-            "Guns N' Roses",
-          id: "0G21yYKMZoHa30cYVi1iA8",
-          name:
-            "Welcome To The Jungle",
-          uri:
-            "spotify:track:0G21yYKMZoHa30cYVi1iA8"
-        },
-
-        {
-          album: "Meet The Woo", artist: "Pop Smoke", id:
-            "0fIffclhgJC5h8AdMMVvkp",
-          name:
-            "Welcome To The Party",
-          uri:
-            "spotify:track:0fIffclhgJC5h8AdMMVvkp"
-        },
-
-        {
-          album: "Welcome to Wonderland", artist:
-            "Anson Seabra",
-          id:
-            "3JfHYZKy5JmE5Fv4gDTCiz",
-          name:
-            "Welcome to Wonderland",
-          uri:
-            "spotify:track:3JfHYZKy5JmE5Fv4gDTCiz"
-        },
-
-        {
-          album: "Life of a Dark Rose", artist: "Lil Skies",
-          id:
-            "5GpAhJpbHvUi6gY6RG15Ze",
-          name:
-            "Welcome to the Rodeo",
-          uri:
-            "spotify:track:5GpAhJpbHvUi6gY6RG15Ze"
-        },
-
-        {
-          album: "Welcome to Chilis", artist: "Yung Gravy",
-          id:
-            "7BYppcUTuG5ysmaJlGSt3t",
-          name:
-            "Welcome to Chilis",
-          uri:
-            "spotify:track:7BYppcUTuG5ysmaJlGSt3t"
-        },
-
-        {
-          album:
-            "Welcome to the Party (with French Montana & Lil Pump, feat. Zhavia Ward) [from Deadpool 2]",
-          artist:
-            "Diplo",
-          id:
-            "5mqzhMuUpvnMfwNz6iepmO",
-          name:
-            "Welcome to the Party (with French Montana & Lil Pump, feat. Zhavia Ward) - from Deadpool 2",
-          uri:
-            "spotify:track:5mqzhMuUpvnMfwNz6iepmO"
-        },
-        {
-          album:
-            "Good Apollo I'm Burning Star IV Volume One: From Fear Through The Eyes Of Madness",
-          artist:
-            "Coheed and Cambria",
-          id:
-            "42GP0xKtkolBnmqQRvSllO",
-          name:
-            "Welcome Home",
-          uri:
-            "spotify:track:42GP0xKtkolBnmqQRvSllO"
-        },
-
-        {
-          album: "Still Not Getting Any", artist:
-            "Simple Plan",
-          id:
-            "714Lw0m2SmCEhKSPw0Dn8J",
-          name:
-            "Welcome to My Life",
-          uri:
-            "spotify:track:714Lw0m2SmCEhKSPw0Dn8J"
-        }
       ],
       playlistName: "New Playlist",
       playlistTracks: [
       ],
-      localPlaylists: [{
-        id: "id1",
-        name: "Your local playlists will be shown in this section."
-      },
-      {
-        id: "id2",
-        name: "Please log in to Spotify and start your first search to get the access."
-      }
+      localPlaylists: [
       ],
-      playlistID:null
+      playlistID:null,
+      loggedIn:false
     };
 
     this.addTrack = this.addTrack.bind(this);
@@ -137,6 +33,16 @@ class App extends React.Component {
     this.showPlaylistName=this.showPlaylistName.bind(this);
   }
 
+ async search(item) {
+    // this.showLocalPlaylists();
+     await Spotify.search(item).then(tracks => {
+       this.setState({ searchResults: tracks,
+        loggedIn:true
+       });
+     });
+     this.showLocalPlaylists();
+   }
+
   addTrack(newSong) {
     let tracksInPlaylist = this.state.playlistTracks;
     if (tracksInPlaylist.find(track =>
@@ -147,18 +53,19 @@ class App extends React.Component {
       playlistTracks: tracksInPlaylist
     })
   }
-
+//remove track from playlist
   removeTrack(track) {
     let currentPlayListTracks = this.state.playlistTracks;
+    //we create an array of tracks, and when - is clicked, we filter out the element to delete
     let updatedPlaylist = currentPlayListTracks.filter(trackName =>
       trackName.id !== track.id
     );
-
+    //once the array is updated, we set the state to equal this array
     this.setState({
       playlistTracks: updatedPlaylist
     });
   }
-
+//with this method you can change a playlist name 
   updatePlaylistName(newName) {
     if (newName !== this.state.playlistName) {
       this.setState({
@@ -166,27 +73,22 @@ class App extends React.Component {
       });
     }
   }
-
-  savePlaylist() {
+// this method allows user to save a new playlist / or to save the edited playlist
+  async savePlaylist() {
     const trackURIs = this.state.playlistTracks.map(track => {
       return track.uri
     });
-    Spotify.savePlaylist(this.state.playlistName, trackURIs,this.state.playlistID);
+    await Spotify.savePlaylist(this.state.playlistName, trackURIs,this.state.playlistID);
     this.setState({
       playlistName: 'New playlist',
       playlistTracks: [],
-      playlistID:null
+      playlistID:null,
     });
     alert("Playlist successfully added");
-  }
-
-  search(item) {
     this.showLocalPlaylists();
-    Spotify.search(item).then(tracks => {
-      this.setState({ searchResults: tracks });
-    });
   }
 
+// this method is responsible for uploading the list of local playlists when the user logged in 
   showLocalPlaylists() {
     Spotify.getUserPlaylists().then(playlists => {
       this.setState({
@@ -194,7 +96,7 @@ class App extends React.Component {
       });
     })
   }
-
+ //once local playlist name is clicked, this method upload list of tracks and enables editing
   showTracksFromLocalPlaylist(playlistID) {
     Spotify.getTracksFromUserPlaylist(playlistID).then(tracks=>{
       this.setState({
@@ -203,18 +105,23 @@ class App extends React.Component {
       });
     })}
   
-
+    //when local playlist is clicked, this method places it's name on top of the playlist
   showPlaylistName(newName){
       this.setState({
         playlistName:newName
       });
     }
+  
 
   render() {
     return (<div>
       <h1>Ja<span className="highlight">mmm</span>ing</h1>
       <div className="App">
-        < SearchBar onSearch={this.search} />
+        < SearchBar 
+        onSearch={this.search} 
+        loggedIn={this.state.loggedIn}
+        placeholderFalse="Please log in to spotify first"
+        placeholderTrue="Enter A Song, Album, or Artist"/>
         <div className="App-playlist">
           <SearchResults searchResults={this.state.searchResults}
             addSong={this.addTrack}
@@ -225,12 +132,17 @@ class App extends React.Component {
               removeTrack={this.removeTrack}
               updatePlaylistName={this.updatePlaylistName}
               savePlaylist={this.savePlaylist} />
-            <PlaylistList playlists={this.state.localPlaylists} 
+            {this.state.loggedIn&&<PlaylistList playlists={this.state.localPlaylists} 
             showTracks={this.showTracksFromLocalPlaylist}
-            showPlaylistName={this.showPlaylistName}/>
+            showPlaylistName={this.showPlaylistName}
+            updateScreen={this.showLocalPlaylists}/>}
           </div>
         </div>
       </div>
+      <footer>
+       <h3>Siriakivska Iuliia | 2020</h3> <br/>
+      <span>This project was inspired and created as part of education at &copy;Codecademy</span>
+      </footer>
     </div>)
   }
 }

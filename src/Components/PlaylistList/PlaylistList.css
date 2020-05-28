@@ -18,9 +18,11 @@
   .PlaylistList .Playlists{
       margin-top: 1rem;
       width: 100%;
-      
   }
-  
+  .PlaylistList h2:hover {
+    cursor: pointer;
+    color:  #6c41ec;
+  }
   
   ::-webkit-scrollbar {
       width: 0px;
