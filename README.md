@@ -1,3 +1,13 @@
+# Jamming: manage your Spotify playlists easily
+Jamming is a ReactJS application, powered by Spotify API.
+First of all, you will have to Log In using your Spotify account. 
+Then there is a number of options available:
+- Browse songs in search section
+- Create new playlists, and save them to your library
+- Update, or delete your existing playlists
+- All changes you make in Jamming are of immediate effect and you will be able to see your library updating right away.
+
+---
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

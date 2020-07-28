@@ -12,15 +12,12 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      searchResults: [
-      ],
+      searchResults: [],
       playlistName: "New Playlist",
-      playlistTracks: [
-      ],
-      localPlaylists: [
-      ],
-      playlistID:null,
-      loggedIn:false
+      playlistTracks: [],
+      localPlaylists: [],
+      playlistID: null,
+      loggedIn: false,
     };
 
     this.addTrack = this.addTrack.bind(this);
@@ -29,121 +26,150 @@ class App extends React.Component {
     this.savePlaylist = this.savePlaylist.bind(this);
     this.search = this.search.bind(this);
     this.showLocalPlaylists = this.showLocalPlaylists.bind(this);
-    this.showTracksFromLocalPlaylist=this.showTracksFromLocalPlaylist.bind(this);
-    this.showPlaylistName=this.showPlaylistName.bind(this);
+    this.showTracksFromLocalPlaylist = this.showTracksFromLocalPlaylist.bind(
+      this
+    );
+    this.showPlaylistName = this.showPlaylistName.bind(this);
+    this.unfollowPlaylist= this.unfollowPlaylist.bind(this);
   }
 
- async search(item) {
-    // this.showLocalPlaylists();
-     await Spotify.search(item).then(tracks => {
-       this.setState({ searchResults: tracks,
-        loggedIn:true
-       });
-     });
-     this.showLocalPlaylists();
-   }
+  async search(item) {
+    await Spotify.search(item).then((tracks) => {
+      this.setState({ searchResults: tracks, loggedIn: true });
+    });
+    await this.showLocalPlaylists();
+  }
 
   addTrack(newSong) {
     let tracksInPlaylist = this.state.playlistTracks;
-    if (tracksInPlaylist.find(track =>
-      track.id === newSong.id)) { return; }
+    if (tracksInPlaylist.find((track) => track.id === newSong.id)) {
+      return;
+    }
 
     tracksInPlaylist.push(newSong);
     this.setState({
-      playlistTracks: tracksInPlaylist
-    })
+      playlistTracks: tracksInPlaylist,
+    });
   }
-//remove track from playlist
+  //remove track from playlist
   removeTrack(track) {
     let currentPlayListTracks = this.state.playlistTracks;
     //we create an array of tracks, and when - is clicked, we filter out the element to delete
-    let updatedPlaylist = currentPlayListTracks.filter(trackName =>
-      trackName.id !== track.id
+    let updatedPlaylist = currentPlayListTracks.filter(
+      (trackName) => trackName.id !== track.id
     );
     //once the array is updated, we set the state to equal this array
     this.setState({
-      playlistTracks: updatedPlaylist
+      playlistTracks: updatedPlaylist,
     });
   }
-//with this method you can change a playlist name 
+  //with this method you can change a playlist name
   updatePlaylistName(newName) {
     if (newName !== this.state.playlistName) {
       this.setState({
-        playlistName: newName
+        playlistName: newName,
       });
     }
   }
-// this method allows user to save a new playlist / or to save the edited playlist
+  // this method allows user to save a new playlist / or to save the edited playlist
   async savePlaylist() {
-    const trackURIs = this.state.playlistTracks.map(track => {
-      return track.uri
+    const trackURIs = this.state.playlistTracks.map((track) => {
+      return track.uri;
     });
-    await Spotify.savePlaylist(this.state.playlistName, trackURIs,this.state.playlistID);
+    await Spotify.savePlaylist(
+      this.state.playlistName,
+      trackURIs,
+      this.state.playlistID
+    );
     this.setState({
-      playlistName: 'New playlist',
+      playlistName: "New playlist",
       playlistTracks: [],
-      playlistID:null,
+      playlistID: null,
     });
-    alert("Playlist successfully added");
+    //alert("Playlist successfully added");
     this.showLocalPlaylists();
   }
 
-// this method is responsible for uploading the list of local playlists when the user logged in 
-  showLocalPlaylists() {
-    Spotify.getUserPlaylists().then(playlists => {
+  // this method is responsible for uploading the list of local playlists when the user logged in
+  async showLocalPlaylists() {
+    await Spotify.getUserPlaylists().then((playlists) => {
       this.setState({
-        localPlaylists: playlists
+        localPlaylists: playlists,
       });
-    })
+    });
   }
- //once local playlist name is clicked, this method upload list of tracks and enables editing
+  //once local playlist name is clicked, this method upload list of tracks and enables editing
   showTracksFromLocalPlaylist(playlistID) {
-    Spotify.getTracksFromUserPlaylist(playlistID).then(tracks=>{
+    Spotify.getTracksFromUserPlaylist(playlistID).then((tracks) => {
       this.setState({
-        playlistTracks:tracks,
-        playlistID:playlistID
+        playlistTracks: tracks,
+        playlistID: playlistID,
       });
-    })}
-  
-    //when local playlist is clicked, this method places it's name on top of the playlist
-  showPlaylistName(newName){
-      this.setState({
-        playlistName:newName
-      });
-    }
-  
+    });
+  }
+
+  //when local playlist is clicked, this method places it's name on top of the playlist
+  showPlaylistName(newName) {
+    this.setState({
+      playlistName: newName,
+    });
+  }
+
+  async unfollowPlaylist(id){
+    await Spotify.unfollowPlaylist(id);
+    //alert("Playlist successfully unfollowed");
+    this.showLocalPlaylists();
+   //document.getElementById(id).parentNode.remove();
+    
+  }
 
   render() {
-    return (<div>
-      <h1>Ja<span className="highlight">mmm</span>ing</h1>
-      <div className="App">
-        < SearchBar 
-        onSearch={this.search} 
-        loggedIn={this.state.loggedIn}
-        placeholderFalse="Please log in to spotify first"
-        placeholderTrue="Enter A Song, Album, or Artist"/>
-        <div className="App-playlist">
-          <SearchResults searchResults={this.state.searchResults}
-            addSong={this.addTrack}
+    return (
+      <div>
+        <h1>
+          Ja<span className="highlight">mmm</span>ing
+        </h1>
+        <div className="App">
+          <SearchBar
+            onSearch={this.search}
+            loggedIn={this.state.loggedIn}
+            placeholderFalse="Please log in to spotify first"
+            placeholderTrue="Enter A Song, Album, or Artist"
           />
-          <div className="Playlists">
-            <Playlist name={this.state.playlistName}
-              playlistTracks={this.state.playlistTracks}
-              removeTrack={this.removeTrack}
-              updatePlaylistName={this.updatePlaylistName}
-              savePlaylist={this.savePlaylist} />
-            {this.state.loggedIn&&<PlaylistList playlists={this.state.localPlaylists} 
-            showTracks={this.showTracksFromLocalPlaylist}
-            showPlaylistName={this.showPlaylistName}
-            updateScreen={this.showLocalPlaylists}/>}
+          <div className="App-playlist">
+            <SearchResults
+              searchResults={this.state.searchResults}
+              addSong={this.addTrack}
+            />
+            <div className="Playlists">
+              <Playlist
+                name={this.state.playlistName}
+                playlistTracks={this.state.playlistTracks}
+                removeTrack={this.removeTrack}
+                updatePlaylistName={this.updatePlaylistName}
+                savePlaylist={this.savePlaylist}
+              />
+              {this.state.loggedIn && (
+                <PlaylistList
+                  playlists={this.state.localPlaylists}
+                  showTracks={this.showTracksFromLocalPlaylist}
+                  showPlaylistName={this.showPlaylistName}
+                  updateScreen={this.showLocalPlaylists}
+                  unfollowPlaylist={this.unfollowPlaylist}
+                />
+              )}
+            </div>
           </div>
         </div>
+        <footer>
+          <h3>Siriakivska Iuliia | 2020</h3> <br />
+          <span>
+            This project was inspired and created as part of education at
+            &copy;Codecademy
+          </span>
+        </footer>
       </div>
-      <footer>
-       <h3>Siriakivska Iuliia | 2020</h3> <br/>
-      <span>This project was inspired and created as part of education at &copy;Codecademy</span>
-      </footer>
-    </div>)
+    );
   }
 }
 

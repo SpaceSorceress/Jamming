@@ -1,6 +1,8 @@
 .LocalPlaylist{
     margin-bottom: 1rem;
     align-items: baseline ;
+    display: flex;
+    justify-content: space-between ;
 }
 
 .LocalPlaylist h3{
@@ -12,4 +14,20 @@
 .LocalPlaylist h3:hover{
         color:  #6c41ec;
         cursor: pointer; 
+}
+.LocalPlaylist button{
+    cursor: pointer;
+    width: 8.11rem;
+    padding: .77rem 0;
+    border-radius: 54px;
+    background-color: #010c3f;
+    text-align: center;
+    font-size: .833rem;
+    transition: background-color .25s;
+    border: 0px;
+    color: #fff;
+    font-weight: bold;
+}
+.LocalPlaylist button:hover{
+    background-color:  #6c41ec;
 }

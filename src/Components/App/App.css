@@ -17,9 +17,6 @@ h1 {
   color: #fff;
 }
 
-h1 .highlight {
-  color: #6c41ec;
-}
 
 h2 {
   font-family: 'Poppins', sans-serif;
@@ -66,7 +63,7 @@ footer span{
 }
 
 @media only screen and (max-width: 1020px) {
-  .App-playlist {
+  .App-playlist  {
     align-items: center;
     flex-direction: column;
   }

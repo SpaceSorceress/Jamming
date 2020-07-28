@@ -23,11 +23,16 @@ class PlaylistList extends React.Component{
                 <h2 onClick={this.updateScreenNow}>Local Playlists</h2>
                 <div className="Playlists">
                 {this.props.playlists.map(playlist=>{
-                    return <PlaylistName 
-                    name={playlist.name}
-                    key={playlist.id} id={playlist.id}
-                    showTracks={this.props.showTracks}
-                    showPlaylistName={this.props.showPlaylistName}/>
+                    return (
+                      <PlaylistName
+                        name={playlist.name}
+                        key={playlist.id}
+                        id={playlist.id}
+                        showTracks={this.props.showTracks}
+                        showPlaylistName={this.props.showPlaylistName}
+                        unfollowPlaylist={this.props.unfollowPlaylist}
+                      />
+                    );
                 })}
                 </div>
             </div>

@@ -32,18 +32,38 @@ import './SearchBar.css';
 
     render() {
         return (
-            <div className="SearchBar" onKeyDown={this.keyDown}>
-                {this.props.loggedIn&&<input placeholder={this.props.placeholderTrue}
-                onChange={this.handleValueChange} />}
-                {!this.props.loggedIn&&<input value={this.props.placeholderFalse}
-                onChange={this.handleValueChange} />}
+          <div className="SearchBar" onKeyDown={this.keyDown}>
+            {this.props.loggedIn && (
+              <input
+                id="inputField"
+                placeholder={this.props.placeholderTrue}
+                onChange={this.handleValueChange}
+              />
+            )}
+            {!this.props.loggedIn && (
+              <input
+                id="inputField"
+                placeholder={this.props.placeholderFalse}
+                onChange={this.handleValueChange}
+              />
+            )}
 
-                {this.props.loggedIn&&<button className="SearchButton"
-                onClick={this.handleSearch}>SEARCH</button>}
-                {!this.props.loggedIn&&<button className="SearchButton"
-                onClick={this.handleSearch} id="searchButton">LOG IN</button>}
-            </div>
-        )
+            {this.props.loggedIn && (
+              <button className="SearchButton" onClick={this.handleSearch}>
+                SEARCH
+              </button>
+            )}
+            {!this.props.loggedIn && (
+              <button
+                className="SearchButton"
+                onClick={this.handleSearch}
+                id="searchButton"
+              >
+                START
+              </button>
+            )}
+          </div>
+        );
     }
 }
 

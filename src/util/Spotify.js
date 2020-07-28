@@ -1,6 +1,6 @@
 const clientID = "073e5992c3ee4746945512175e90aa56";
-const redirectURi = "https://jamming_sir.surge.sh/";
-//const redirectURi = "http://localhost:3000/";
+//const redirectURi = "https://jamming_sir.surge.sh/";
+const redirectURi = "http://localhost:3000/";
 let accessToken;
 let userID;
 const spotifyLink = "https://api.spotify.com/v1/";
@@ -34,6 +34,8 @@ const Spotify = {
       //in case if url does not contain access token we redirect the user to thi page in order to ask him to log in
       //to redirect user use window.location
       window.location = `https://accounts.spotify.com/authorize?client_id=${clientID}&response_type=token&scope=playlist-modify-public%20playlist-read-private%20playlist-read-collaborative%20playlist-modify-public%20playlist-modify-private&redirect_uri=${redirectURi}`;
+      document.getElementById("inputField").placeholder =
+        "Enter A Song, Album, or Artist";
     }
   },
 
@@ -81,7 +83,6 @@ const Spotify = {
       })
       .then((jsonResponse) => {
         userID = jsonResponse.id;
-        console.log(userID);
       });
   },
 
@@ -148,7 +149,7 @@ const Spotify = {
               name: newPlaylistName,
             }),
           }).then((response) => {
-            console.log(response);
+            //console.log(response);
           });
         });
     }
@@ -160,10 +161,8 @@ const Spotify = {
       Authorization: `Bearer ${accessToken}`,
     };
     const userID = await this.getCurrentUserId(); //GET current user’s ID
+    //Get a list of the playlists owned or followed by a Spotify user.
 
-    console.log(accessToken);
-    console.log(userID);
-    //Get a list of the playlists owned or followed by a Spotify user.*/
     return fetch(`${spotifyLink}users/${userID}/playlists`, {
       headers: headers,
     })
@@ -203,6 +202,16 @@ const Spotify = {
         }));
       });
   },
+
+  unfollowPlaylist(id){
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+    fetch(`${spotifyLink}playlists/${id}/followers`, {
+        headers: headers,
+        method: "DELETE"});
+
+  }
 };
 
 export default Spotify;
