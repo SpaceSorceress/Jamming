@@ -1,11 +1,10 @@
-import React from 'react';
-import './App.css';
-import SearchBar from '../SearchBar/SearchBar';
-import SearchResults from '../SearchResults/SearchResults';
-import Playlist from '../Playlist/Playlist';
-import PlaylistList from '../PlaylistList/PlaylistList';
-import Spotify from '../../util/Spotify';
-
+import React from "react";
+import "./App.css";
+import SearchBar from "../SearchBar/SearchBar";
+import SearchResults from "../SearchResults/SearchResults";
+import Playlist from "../Playlist/Playlist";
+import PlaylistList from "../PlaylistList/PlaylistList";
+import Spotify from "../../util/Spotify";
 
 class App extends React.Component {
   constructor(props) {
@@ -30,7 +29,7 @@ class App extends React.Component {
       this
     );
     this.showPlaylistName = this.showPlaylistName.bind(this);
-    this.unfollowPlaylist= this.unfollowPlaylist.bind(this);
+    this.unfollowPlaylist = this.unfollowPlaylist.bind(this);
   }
 
   async search(item) {
@@ -86,7 +85,6 @@ class App extends React.Component {
       playlistTracks: [],
       playlistID: null,
     });
-    //alert("Playlist successfully added");
     this.showLocalPlaylists();
   }
 
@@ -115,12 +113,9 @@ class App extends React.Component {
     });
   }
 
-  async unfollowPlaylist(id){
+  async unfollowPlaylist(id) {
     await Spotify.unfollowPlaylist(id);
-    //alert("Playlist successfully unfollowed");
     this.showLocalPlaylists();
-   //document.getElementById(id).parentNode.remove();
-    
   }
 
   render() {
@@ -136,30 +131,32 @@ class App extends React.Component {
             placeholderFalse="Please log in to spotify first"
             placeholderTrue="Enter A Song, Album, or Artist"
           />
-          <div className="App-playlist">
-            <SearchResults
-              searchResults={this.state.searchResults}
-              addSong={this.addTrack}
-            />
-            <div className="Playlists">
-              <Playlist
-                name={this.state.playlistName}
-                playlistTracks={this.state.playlistTracks}
-                removeTrack={this.removeTrack}
-                updatePlaylistName={this.updatePlaylistName}
-                savePlaylist={this.savePlaylist}
+          {this.state.loggedIn && (
+            <div className="App-playlist">
+              <SearchResults
+                searchResults={this.state.searchResults}
+                addSong={this.addTrack}
               />
-              {this.state.loggedIn && (
-                <PlaylistList
-                  playlists={this.state.localPlaylists}
-                  showTracks={this.showTracksFromLocalPlaylist}
-                  showPlaylistName={this.showPlaylistName}
-                  updateScreen={this.showLocalPlaylists}
-                  unfollowPlaylist={this.unfollowPlaylist}
+              <div className="Playlists">
+                <Playlist
+                  name={this.state.playlistName}
+                  playlistTracks={this.state.playlistTracks}
+                  removeTrack={this.removeTrack}
+                  updatePlaylistName={this.updatePlaylistName}
+                  savePlaylist={this.savePlaylist}
                 />
-              )}
+                {this.state.loggedIn && (
+                  <PlaylistList
+                    playlists={this.state.localPlaylists}
+                    showTracks={this.showTracksFromLocalPlaylist}
+                    showPlaylistName={this.showPlaylistName}
+                    updateScreen={this.showLocalPlaylists}
+                    unfollowPlaylist={this.unfollowPlaylist}
+                  />
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <footer>
           <h3>Siriakivska Iuliia | 2020</h3> <br />

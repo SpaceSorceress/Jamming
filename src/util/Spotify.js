@@ -34,14 +34,14 @@ const Spotify = {
       //in case if url does not contain access token we redirect the user to thi page in order to ask him to log in
       //to redirect user use window.location
       window.location = `https://accounts.spotify.com/authorize?client_id=${clientID}&response_type=token&scope=playlist-modify-public%20playlist-read-private%20playlist-read-collaborative%20playlist-modify-public%20playlist-modify-private&redirect_uri=${redirectURi}`;
-      document.getElementById("inputField").placeholder =
-        "Enter A Song, Album, or Artist";
+      
     }
   },
 
   //accepts a parameter for the user’s search term;returns a promise that will eventually resolve to the list of tracks from the search.
-  search(searchItem) {
+  async search(searchItem) {
     const accessToken = this.getAccessToken();
+    await this.getCurrentUserId();
     const searchPath = `${spotifyLink}search?type=track&q=${searchItem}`;
     const browserHeader = {
       headers: {
@@ -160,7 +160,7 @@ const Spotify = {
     const headers = {
       Authorization: `Bearer ${accessToken}`,
     };
-    const userID = await this.getCurrentUserId(); //GET current user’s ID
+    
     //Get a list of the playlists owned or followed by a Spotify user.
 
     return fetch(`${spotifyLink}users/${userID}/playlists`, {
@@ -171,7 +171,6 @@ const Spotify = {
       })
       .then((jsonResponse) => {
         if (jsonResponse.items) {
-          console.log(jsonResponse.items);
           return jsonResponse.items.map((playlist) => ({
             id: playlist.id,
             name: playlist.name,
